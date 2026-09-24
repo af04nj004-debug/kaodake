@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff4fb">
+<title>顔だけ。β v0.3.1</title>
+<style>
+:root{--ink:#33263b;--muted:#85768e;--pink:#ff6fb5;--purple:#9d7cff;--blue:#73c8ff;--yellow:#ffd96a;--card:rgba(255,255,255,.88);--line:rgba(133,95,157,.15)}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(145deg,#fff7fb 0%,#f5f0ff 48%,#effaff 100%);min-height:100svh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 15%,rgba(255,111,181,.12),transparent 22%),radial-gradient(circle at 90% 28%,rgba(115,200,255,.15),transparent 25%),radial-gradient(circle at 45% 90%,rgba(157,124,255,.11),transparent 28%)}
+.app{position:relative;max-width:560px;margin:auto;min-height:100svh;padding:18px 16px 34px;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;font-size:23px;letter-spacing:.04em}.beta{font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px;background:#fff;color:var(--pink);box-shadow:0 4px 16px rgba(130,80,140,.08)}
+.screen{display:none;flex:1}.screen.active{display:flex;flex-direction:column}.hero{margin:auto 0;text-align:center}.logo{font-size:58px;font-weight:950;letter-spacing:.02em;margin:0;background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));-webkit-background-clip:text;color:transparent}.tag{font-size:18px;font-weight:800;margin-top:12px}.sub{color:var(--muted);font-size:13px;line-height:1.7}
+.btn{border:0;border-radius:18px;padding:16px 18px;font-weight:850;font-size:16px;color:#fff;width:100%;margin-top:16px;background:linear-gradient(90deg,var(--pink),var(--purple));box-shadow:0 8px 22px rgba(180,100,190,.2)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}.btn.small{padding:12px;margin-top:10px;font-size:14px}
+.progressWrap{margin:18px 0 8px}.progress{height:8px;background:rgba(255,255,255,.75);border-radius:99px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));width:0;transition:.25s}.phase{text-align:center;font-size:11px;font-weight:900;color:var(--purple);letter-spacing:.12em;margin-top:9px}.count{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}
+.question{text-align:center;font-weight:900;font-size:23px;margin:18px 0 14px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.face{appearance:none;background:var(--card);border:2px solid rgba(255,255,255,.9);border-radius:25px;overflow:hidden;padding:0;box-shadow:0 12px 28px rgba(90,55,110,.10);color:var(--ink)}.face:active{transform:scale(.97)}.portrait{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:62px;background:linear-gradient(145deg,#ffe8f4,#f1eaff 52%,#e7f7ff)}.pick{padding:14px;font-weight:850}.hint{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}.back{border:0;background:transparent;color:#776781;font-weight:800;padding:14px;margin:5px auto 0;display:block}.back:disabled{opacity:.3}
+.mid{margin:auto 0;text-align:center;background:var(--card);padding:30px 22px;border-radius:30px;box-shadow:0 15px 40px rgba(100,60,120,.10)}.spark{font-size:34px}.mid h2{font-size:28px;margin:8px 0}.mid .big{font-size:44px;font-weight:950;background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;color:transparent}
+.resultTitle{text-align:center;margin:26px 0 10px}.eyebrow{font-size:11px;letter-spacing:.18em;font-weight:900;color:var(--purple)}.resultTitle h2{margin:7px 0;font-size:30px}.diamond{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:start;margin:12px 0 8px}.rankCard{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:20px;padding:7px;text-align:center;box-shadow:0 8px 24px rgba(95,60,120,.09)}.rankCard.r1{grid-column:2/4}.rankCard.r2{grid-column:1/3}.rankCard.r3{grid-column:3/5}.rankCard.r4{grid-column:1/3}.rankCard.r5{grid-column:3/5}.rankCard.r1{width:78%;justify-self:center}.rankPic{aspect-ratio:1;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:38px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}.r1 .rankPic{font-size:55px}.medal{font-weight:950;font-size:13px;margin-top:7px;color:var(--pink)}.name{font-weight:900;font-size:13px;margin-top:2px}.group{font-size:10px;color:var(--muted)}
+.panel{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 28px rgba(95,60,120,.08)}.knowTop{text-align:center}.knowPic{width:92px;aspect-ratio:1;margin:8px auto;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choices .btn{margin-top:12px}.steps{text-align:center;font-size:12px;color:var(--muted);font-weight:800}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.stat{background:#fff;border-radius:18px;padding:14px;border:1px solid var(--line)}.stat small{color:var(--muted)}.num{font-size:29px;font-weight:950;margin:3px 0}.desc{font-size:13px;line-height:1.7;margin-top:10px}.detailPerson{padding:12px 0;border-bottom:1px dashed rgba(100,70,120,.15)}.detailPerson:last-child{border:0}.detailHead{display:flex;align-items:center;gap:10px}.avatar{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:25px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.7);border-radius:16px;padding:4px;margin:12px 0}.tab{border:0;border-radius:13px;padding:11px;background:transparent;font-weight:850;color:var(--muted)}.tab.on{background:#fff;color:var(--pink);box-shadow:0 4px 14px rgba(100,70,120,.08)}.communityRow{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--line)}.communityRow .pos{width:28px;font-weight:950;color:var(--purple)}.communityRow .avatar{width:42px;height:42px}.metric{margin-left:auto;font-weight:950;color:var(--pink)}.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}.footer{font-size:10px;color:#a396aa;text-align:center;margin-top:24px}
+</style>
+</head><body><main class="app">
+<header><div class="brand">顔だけ。</div><div class="beta">β v0.3.1</div></header>
+<section id="start" class="screen active"><div class="hero"><div class="logo">顔だけ。</div><div class="tag">推しを忘れて、顔だけで選んでください。</div><p class="sub">名前も、所属も、人気も表示しません。<br>100回の2択から、あなたの「好きな顔」を探します。<br><span style="font-size:11px">（これから出てくる女性は、すべてアイドルです。）</span></p><button class="btn" onclick="begin()">100問ではじめる ♡</button><button class="btn secondary" onclick="showCommunity()">みんなのランキング</button><div class="note">β版の人物・集計値はすべて仮データです。</div></div></section>
+<section id="game" class="screen"><div class="progressWrap"><div class="progress"><div id="bar" class="bar"></div></div><div id="phase" class="phase"></div><div id="count" class="count"></div></div><div class="question">どっちの顔が好き？</div><div class="pair"><button class="face" onclick="choose(0)"><div id="p0" class="portrait"></div><div class="pick">こっち ♡</div></button><button class="face" onclick="choose(1)"><div id="p1" class="portrait"></div><div class="pick">こっち ♡</div></button></div><div class="hint">考えすぎず、直感で。</div><button id="undoBtn" class="back" onclick="undo()">← ひとつ前に戻る</button></section>
+<section id="mid" class="screen"><div class="mid"><div class="spark">✦ ♡ ✦</div><div class="big">70 / 100</div><h2>あなたの「好きな顔」、<br>かなり絞れてきました。</h2><p class="sub">ここからは、あなたが選んできた顔たちが<br>何度もぶつかります。<br><br><b>残り30問。BEST5を決めましょう。</b></p><button class="btn" onclick="startFinal()">BEST5を決める →</button><button class="back" onclick="backFromMid()">← 70問目に戻る</button></div></section>
+<section id="final10" class="screen"><div class="mid"><div class="spark">✦ ♡ ✦</div><div class="big">90 / 100</div><h2>あと10問。</h2><p class="sub">BEST5候補は、もうすぐ決まります。<br><br>最後は迷う組み合わせが続くかもしれません。<br>それでも、考えすぎず「顔だけ」で。</p><button class="btn" onclick="startLast10()">最後の10問へ ♡</button><button class="back" onclick="backFromFinal10()">← 90問目に戻る</button></div></section>
+<section id="result" class="screen"><div class="resultTitle"><div class="eyebrow">YOUR BEST 5</div><h2>あなたの「顔だけ。」</h2><div class="sub">100回、名前を隠して選んだ結果です。</div></div><div id="diamond" class="diamond"></div><button class="btn" onclick="startKnown()">BEST5を詳しく見る ♡</button><button class="btn secondary small" onclick="showCommunity('result')">みんなのランキング</button></section>
+<section id="known" class="screen"><div class="resultTitle"><div class="eyebrow">DO YOU KNOW?</div><h2>知っていましたか？</h2><div class="sub">「顔だけ。」を始める前から知っていたか教えてください。</div></div><div id="knownBox" class="panel"></div><button class="back" onclick="backKnown()">← 戻る</button></section>
+<section id="detail" class="screen"><div class="resultTitle"><div class="eyebrow">YOUR RESULT</div><h2>BEST5を詳しく見る</h2><div class="sub">あなたの結果と、みんなの選択傾向。</div></div><div id="diagnosis" class="panel"></div><div id="detailList" class="panel"></div><button class="btn secondary small" onclick="showCommunity('detail')">みんなのランキングを見る</button><button class="back" onclick="show('result')">← ダイヤモンドランキングに戻る</button><button class="btn" onclick="restart()">もう一度、顔だけ。</button><div class="note">β版の全体集計は表示確認用の仮データです。</div></section>
+<section id="community" class="screen"><div class="resultTitle"><div class="eyebrow">EVERYONE'S 顔だけ。</div><h2>みんなのランキング</h2><div class="sub">β版ではサンプル集計を表示しています。</div></div><div class="tabs"><button id="tabFace" class="tab on" onclick="renderCommunity('face')">顔だけ。ランキング</button><button id="tabDisc" class="tab" onclick="renderCommunity('disc')">発掘ランキング</button></div><div id="communityList" class="panel"></div><button class="back" onclick="communityBack()">← 戻る</button></section>
+<div class="footer">顔だけ。 — 推しを忘れて、顔だけで選んでください。</div>
+</main>
+<script>
+const idols=[
+{name:'朝倉 ひな',group:'LUMI',pic:'🙂',base:74,disc:66},{name:'白石 りん',group:'MELLOW',pic:'😊',base:81,disc:38},{name:'天野 すず',group:'Aster',pic:'☺️',base:69,disc:79},{name:'水瀬 みう',group:'NOVA',pic:'😌',base:77,disc:71},{name:'桜庭 ゆら',group:'Ciel',pic:'🥰',base:84,disc:52},{name:'月城 まい',group:'Reve',pic:'😇',base:72,disc:83},{name:'一ノ瀬 かれん',group:'MUSE',pic:'😉',base:79,disc:61},{name:'橘 こはる',group:'Fleur',pic:'😄',base:68,disc:75},{name:'星野 りあ',group:'Lily',pic:'🤍',base:76,disc:68},{name:'小鳥遊 なな',group:'Prism',pic:'✨',base:73,disc:80},{name:'森川 せな',group:'Noir',pic:'🌙',base:71,disc:77},{name:'藤咲 あい',group:'Bloom',pic:'🌸',base:82,disc:57}];
+let scores=[],appear=[],rating=[],round=0,pair=[],history=[],rank=[],knownAnswers=Array(5).fill(null),knownIndex=0,finalPool=[],communityReturn='start',finalStarted=false,last10Started=false;
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0)}
+function begin(){scores=idols.map(()=>0);appear=idols.map(()=>0);rating=idols.map(()=>1000);round=0;history=[];rank=[];knownAnswers=Array(5).fill(null);finalPool=[];finalStarted=false;last10Started=false;show('game');nextPair()}
+function winRate(i){return scores[i]/Math.max(1,appear[i])}
+function strength(i){return rating[i]+Math.min(appear[i],10)*2}
+function leastSeen(pool){let m=Math.min(...pool.map(i=>appear[i]));return pool.filter(i=>appear[i]===m)}
+function randomOf(a){return a[Math.floor(Math.random()*a.length)]}
+function makePair(pool){
+  // 1-40: broad exploration, prioritizing faces seen least often.
+  if(round<40){
+    let a=randomOf(leastSeen(pool));
+    let rest=pool.filter(i=>i!==a);
+    let b=randomOf(leastSeen(rest));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 41-70: blend likely favorites with under-tested faces.
+  if(round<70){
+    let ordered=[...pool].sort((a,b)=>strength(b)-strength(a));
+    let fav=ordered.slice(0,Math.min(7,ordered.length));
+    let under=[...pool].sort((a,b)=>appear[a]-appear[b]).slice(0,Math.min(7,pool.length));
+    let a=randomOf(Math.random()<.7?fav:under);
+    let candidates=pool.filter(i=>i!==a).sort((x,y)=>Math.abs(rating[x]-rating[a])-Math.abs(rating[y]-rating[a])||appear[x]-appear[y]);
+    let b=randomOf(candidates.slice(0,Math.min(4,candidates.length)));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 71-90: compare close contenders inside the ranking pool.
+  if(round<90){
+    let ordered=[...pool].sort((a,b)=>rating[b]-rating[a]);
+    let a=randomOf(ordered.slice(0,Math.min(8,ordered.length)));
+    let candidates=ordered.filter(i=>i!==a).sort((x,y)=>Math.abs(rating[x]-rating[a])-Math.abs(rating[y]-rating[a]));
+    let b=randomOf(candidates.slice(0,Math.min(3,candidates.length)));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 91-100: position battles around the BEST5 boundary and top ranks.
+  let ordered=[...pool].sort((a,b)=>rating[b]-rating[a]);
+  const battles=[[0,1],[1,2],[2,3],[3,4],[4,5],[0,2],[1,3],[2,4],[3,5],[0,1]];
+  let [x,y]=battles[Math.min(round-90,battles.length-1)];
+  x=Math.min(x,ordered.length-2); y=Math.min(y,ordered.length-1);
+  return Math.random()<.5?[ordered[x],ordered[y]]:[ordered[y],ordered[x]];
+}
+function nextPair(){if(round===70&&!finalStarted){show('mid');return}if(round===90&&!last10Started){show('final10');return}if(round>=100){finish();return}let pool=round<70?idols.map((_,i)=>i):(finalPool.length?finalPool:idols.map((_,i)=>i));pair=makePair(pool);renderPair()}
+function renderPair(){
+ document.getElementById('p0').textContent=idols[pair[0]].pic;document.getElementById('p1').textContent=idols[pair[1]].pic;
+ document.getElementById('count').textContent=`${round+1} / 100`;
+ document.getElementById('phase').textContent=round<40?'DISCOVERY 40':round<70?'REFINE 30':round<90?'RANKING 20':'BEST5 CHECK 10';
+ document.getElementById('bar').style.width=`${round}%`;document.getElementById('undoBtn').disabled=history.length===0
+}
+function choose(side){
+ history.push({pair:[...pair],scores:[...scores],appear:[...appear],rating:[...rating],round,finalPool:[...finalPool],finalStarted,last10Started});
+ let winner=pair[side],loser=pair[1-side];
+ appear[pair[0]]++;appear[pair[1]]++;scores[winner]++;
+ let expected=1/(1+Math.pow(10,(rating[loser]-rating[winner])/400)),k=32;
+ rating[winner]+=k*(1-expected);rating[loser]+=k*(0-(1-expected));
+ round++;nextPair()
+}
+function undo(){if(!history.length)return;let h=history.pop();pair=h.pair;scores=h.scores;appear=h.appear;rating=h.rating;round=h.round;finalPool=h.finalPool;finalStarted=h.finalStarted;last10Started=h.last10Started||false;show('game');renderPair()}
+function startFinal(){
+ finalPool=idols.map((_,i)=>i).sort((a,b)=>rating[b]-rating[a]||winRate(b)-winRate(a)).slice(0,10);
+ finalStarted=true;show('game');nextPair()
+}
+function backFromMid(){undo()}
+function startLast10(){last10Started=true;show('game');nextPair()}
+function backFromFinal10(){undo()}
+function finish(){
+ rank=idols.map((x,i)=>({...x,idx:i,score:scores[i],rate:winRate(i),rating:rating[i],seen:appear[i]}))
+ .sort((a,b)=>b.rating-a.rating||b.rate-a.rate||b.score-a.score).slice(0,5);
+ renderDiamond();show('result')
+}
+function renderDiamond(){document.getElementById('diamond').innerHTML=rank.map((x,i)=>`<div class="rankCard r${i+1}"><div class="rankPic">${x.pic}</div><div class="medal">${i===0?'👑 ':''}${i+1}位</div><div class="name">${x.name}</div><div class="group">${x.group}</div></div>`).join('')}
+
+function startKnown(){knownIndex=0;renderKnown();show('known')}
+function renderKnown(){if(knownIndex>=5){renderDetails();show('detail');return}let x=rank[knownIndex];document.getElementById('knownBox').innerHTML=`<div class="steps">${knownIndex+1} / 5</div><div class="knowTop"><div class="knowPic">${x.pic}</div><b>${knownIndex+1}位　${x.name}</b><div class="sub">${x.group}</div><h3>このアイドルを知っていましたか？</h3></div><div class="choices"><button class="btn secondary" onclick="answerKnown(true)">知っていた</button><button class="btn" onclick="answerKnown(false)">知らなかった</button></div>`}
+function answerKnown(v){knownAnswers[knownIndex]=v;knownIndex++;renderKnown()}
+function backKnown(){if(knownIndex===0){show('result')}else{knownIndex--;renderKnown()}}
+function explain(x){
+ if(x.base>=76&&x.disc>=65)return'みんなの2択でも選ばれやすく、しかもこのサービスで初めて知る人が多いアイドルです。';
+ if(x.base>=76)return'みんなの2択でも「こっち」と選ばれることが多いアイドルです。';
+ if(x.disc>=65)return'BEST5に選んだ人の中で、このサービスをきっかけに初めて知った人が多いアイドルです。';
+ return'みんなの傾向とは別に、あなたの100回の選択でBEST5に残ったアイドルです。'
+}
+function diagnosisText(){
+ let unknownIdx=knownAnswers.map((v,i)=>v===false?i:-1).filter(i=>i>=0);
+ let unknown=unknownIdx.length,known=5-unknown,topUnknown=knownAnswers[0]===false;
+ let highestUnknown=unknown?unknownIdx[0]+1:null;
+ if(unknown===5)return'<div style="font-size:22px;font-weight:950;line-height:1.4">5人全員が、今回見つけた<br>「新しい好き」。</div><div class="desc">BEST5の誰ひとり、プレイ前には知らなかったアイドルでした。名前もグループも分からない100回の2択で、あなたの目だけが選び続けた5人です。<br><br><b>「知っているから気になる」ではなく、「顔だけで気になった」5人。</b>今回のプレイは、かなり発掘色の強い結果になりました。</div>';
+ if(unknown===0)return'<div style="font-size:22px;font-weight:950;line-height:1.4">やっぱり、好きな顔はブレない。</div><div class="desc">BEST5は全員、あなたがもともと知っていたアイドルでした。名前も所属も隠して選び直しても、普段から知っている5人が上位に残っています。<br><br><b>「推しだから好き」だけではなく、顔だけで選び直しても好きだった。</b>あなたの普段の好みと、今回の100回の選択がかなり重なった結果です。</div>';
+ if(topUnknown)return`<div style="font-size:22px;font-weight:950;line-height:1.4">1位は、まだ知らなかった顔。</div><div class="desc">あなたが100回の2択の末に1位へ選んだのは、プレイ前には知らなかったアイドルでした。さらにBEST5のうち${unknown}人が、今回初めて知ったアイドルです。<br><br><b>今回いちばん大きな発掘は、1位の${rank[0].name}さん。</b>名前やグループの印象を一切使わず、純粋に顔だけで頂点まで残りました。</div>`;
+ if(unknown>=3)return`<div style="font-size:22px;font-weight:950;line-height:1.4">BEST5に、${unknown}人の<br>「新しい好き」。</div><div class="desc">知っていたアイドルは${known}人。一方で、知らなかった${unknown}人も顔だけの比較を勝ち抜いてBEST5まで入りました。<br><br>あなたにはある程度はっきりした「好きな顔」の軸がありながら、まだ知らないアイドルにもその好みが反応しています。<b>最も上位に入った新発見は${highestUnknown}位の${rank[highestUnknown-1].name}さんです。</b></div>`;
+ return`<div style="font-size:22px;font-weight:950;line-height:1.4">いつもの好みに、${unknown}人の新発見。</div><div class="desc">BEST5のうち${known}人は知っていたアイドル、${unknown}人は今回初めて知ったアイドルでした。普段から目に留まる顔と、名前を知らなくても惹かれた顔。その両方が同じBEST5に入っています。<br><br><b>今回の新発見で最も上位だったのは、${highestUnknown}位の${rank[highestUnknown-1].name}さん。</b></div>`
+}
+function personalComment(x,i){
+ let known=knownAnswers[i], rankNo=i+1, own=Math.round(x.rate*100);
+ if(i===0&&!known)return`100回の比較を勝ち抜いて1位になった${x.name}さんは、あなたがプレイ前には知らなかったアイドル。今回の「顔だけ。」最大の発掘です。あなた自身の2択では、この顔を選んだ割合は約${own}%でした。`;
+ if(i===0&&known)return`名前を隠して選び直しても、${x.name}さんが1位。もともと知っていた相手でも、「知っているから」ではなく100回の顔比較の結果として頂点に残りました。あなた自身の2択では約${own}%選んでいます。`;
+ if(!known&&i<3)return`${rankNo}位まで上がってきた${x.name}さんは、今回初めて知ったアイドル。知らない状態からここまで残ったこと自体が、あなたの「好きな顔」にかなり近かったサインです。あなた自身の2択では約${own}%選びました。`;
+ if(!known)return`${rankNo}位の${x.name}さんは、今回のプレイで見つかった新しい顔。BEST5の最後まで残ったことで、これまで知らなかった好みの候補がひとつ増えました。あなた自身の2択では約${own}%選んでいます。`;
+ if(i<3)return`${rankNo}位の${x.name}さんは、もともと知っていたアイドル。名前を隠した状態でも上位に残ったので、普段感じていた魅力と「顔だけ」の選択が重なった結果です。あなた自身の2択では約${own}%選びました。`;
+ return`${rankNo}位の${x.name}さんは、もともと知っていたアイドル。100回の比較を通してBEST5圏内を守りました。知名度を取り除いても、あなたの好みとして残った顔です。あなた自身の2択では約${own}%選んでいます。`
+}
+function renderDetails(){
+ document.getElementById('diagnosis').innerHTML=`<div class="eyebrow">YOUR 顔だけ。DIAGNOSIS</div><h3 style="margin:8px 0">あなたの「顔だけ。」診断</h3>${diagnosisText()}`;
+ document.getElementById('detailList').innerHTML=rank.map((x,i)=>`<div class="detailPerson"><div class="detailHead"><div class="avatar">${x.pic}</div><div><b>${i+1}位　${x.name}</b><div class="sub">${x.group} ・ ${knownAnswers[i]?'知っていた':'知らなかった'}</div></div></div><div class="stats"><div class="stat"><small>顔だけ。率</small><div class="num">${x.base}.0%</div><div class="note">みんなの2択で、このアイドルが選ばれた割合</div></div><div class="stat"><small>発掘度</small><div class="num">${x.disc}.0%</div><div class="note">このアイドルをBEST5に選んだ人のうち、プレイ前は知らなかった人の割合</div></div></div><div class="desc">${personalComment(x,i)}<br><br><span style="color:var(--muted)">${explain(x)}</span></div></div>`).join('')
+}
+function showCommunity(from='start'){communityReturn=from;renderCommunity('face');show('community')}
+function renderCommunity(type){document.getElementById('tabFace').classList.toggle('on',type==='face');document.getElementById('tabDisc').classList.toggle('on',type==='disc');let list=[...idols].sort((a,b)=>type==='face'?b.base-a.base:b.disc-a.disc).slice(0,10);document.getElementById('communityList').innerHTML=list.map((x,i)=>`<div class="communityRow"><div class="pos">${i+1}</div><div class="avatar">${x.pic}</div><div><b>${x.name}</b><div class="sub">${x.group}</div></div><div class="metric">${type==='face'?x.base:x.disc}.0%</div></div>`).join('')}
+function communityBack(){show(communityReturn)}
+function restart(){show('start')}
+</script></body></html>
