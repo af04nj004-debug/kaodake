@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff4fb">
+<title>顔だけ。β v0.4</title>
+<style>
+:root{--ink:#33263b;--muted:#85768e;--pink:#ff6fb5;--purple:#9d7cff;--blue:#73c8ff;--yellow:#ffd96a;--card:rgba(255,255,255,.88);--line:rgba(133,95,157,.15)}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(145deg,#fff7fb 0%,#f5f0ff 48%,#effaff 100%);min-height:100svh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 15%,rgba(255,111,181,.12),transparent 22%),radial-gradient(circle at 90% 28%,rgba(115,200,255,.15),transparent 25%),radial-gradient(circle at 45% 90%,rgba(157,124,255,.11),transparent 28%)}
+.app{position:relative;max-width:560px;margin:auto;min-height:100svh;padding:18px 16px 34px;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;font-size:23px;letter-spacing:.04em}.beta{font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px;background:#fff;color:var(--pink);box-shadow:0 4px 16px rgba(130,80,140,.08)}
+.screen{display:none;flex:1}.screen.active{display:flex;flex-direction:column}.hero{margin:auto 0;text-align:center}.logo{font-size:58px;font-weight:950;letter-spacing:.02em;margin:0;background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));-webkit-background-clip:text;color:transparent}.tag{font-size:18px;font-weight:800;margin-top:12px}.sub{color:var(--muted);font-size:13px;line-height:1.7}
+.btn{border:0;border-radius:18px;padding:16px 18px;font-weight:850;font-size:16px;color:#fff;width:100%;margin-top:16px;background:linear-gradient(90deg,var(--pink),var(--purple));box-shadow:0 8px 22px rgba(180,100,190,.2)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}.btn.again{background:linear-gradient(90deg,#fff0f8,#f2edff);color:var(--purple);border:2px solid rgba(157,124,255,.22);box-shadow:0 7px 18px rgba(120,80,160,.10);margin-top:6px}#result .btn{padding:8px 12px;margin-top:4px;font-size:12px;min-height:0}.btn.small{padding:12px;margin-top:10px;font-size:14px}
+.progressWrap{margin:18px 0 8px}.progress{height:8px;background:rgba(255,255,255,.75);border-radius:99px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));width:0;transition:.25s}.phase{text-align:center;font-size:11px;font-weight:900;color:var(--purple);letter-spacing:.12em;margin-top:9px}.count{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}
+.question{text-align:center;font-weight:900;font-size:23px;margin:18px 0 14px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.face{appearance:none;background:var(--card);border:2px solid rgba(255,255,255,.9);border-radius:25px;overflow:hidden;padding:0;box-shadow:0 12px 28px rgba(90,55,110,.10);color:var(--ink)}.face:active{transform:scale(.97)}.portrait{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:62px;background:linear-gradient(145deg,#ffe8f4,#f1eaff 52%,#e7f7ff)}.pick{padding:14px;font-weight:850}.hint{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}.back{border:0;background:transparent;color:#776781;font-weight:800;padding:14px;margin:5px auto 0;display:block}.back:disabled{opacity:.3}
+.mid{margin:auto 0;text-align:center;background:var(--card);padding:30px 22px;border-radius:30px;box-shadow:0 15px 40px rgba(100,60,120,.10)}.spark{font-size:34px}.mid h2{font-size:28px;margin:8px 0}.mid .big{font-size:44px;font-weight:950;background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;color:transparent}
+.resultTitle{text-align:center;margin:4px 0 2px}.eyebrow{font-size:11px;letter-spacing:.18em;font-weight:900;color:var(--purple)}.resultTitle h2{margin:1px 0;font-size:21px}.diamond{display:grid;grid-template-columns:repeat(12,1fr);gap:7px;align-items:start;margin:8px auto 5px;max-width:430px}.rankCard{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:15px;padding:6px;text-align:center;box-shadow:0 5px 14px rgba(95,60,120,.08)}.rankCard.r1{grid-column:5/9}.rankCard.r2{grid-column:2/6}.rankCard.r3{grid-column:8/12}.rankCard.r4{grid-column:2/6}.rankCard.r5{grid-column:8/12}.rankCard.r1{width:112%;justify-self:center;padding:7px;box-shadow:0 8px 22px rgba(255,111,181,.18);border:2px solid rgba(255,111,181,.18)}.rankPic{aspect-ratio:1/1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}.r1 .rankPic{font-size:56px}.medal{font-weight:950;font-size:11px;margin-top:2px;color:var(--pink);line-height:1.1}.r1 .medal{font-size:15px}.name{font-weight:900;font-size:12px;margin-top:0;line-height:1.1}.r1 .name{font-size:15px}.group{font-size:9px;color:var(--muted);line-height:1.1}
+.panel{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 28px rgba(95,60,120,.08)}.knowTop{text-align:center}.knowPic{width:92px;aspect-ratio:1;margin:8px auto;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choices .btn{margin-top:12px}.steps{text-align:center;font-size:12px;color:var(--muted);font-weight:800}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.stat{background:#fff;border-radius:18px;padding:14px;border:1px solid var(--line)}.stat small{color:var(--muted)}.num{font-size:29px;font-weight:950;margin:3px 0}.desc{font-size:13px;line-height:1.7;margin-top:10px}.detailPerson{padding:12px 0;border-bottom:1px dashed rgba(100,70,120,.15)}.detailPerson:last-child{border:0}.detailHead{display:flex;align-items:center;gap:10px}.avatar{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(145deg,#ffe5f3,#eee8ff,#e5f7ff)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.7);border-radius:16px;padding:4px;margin:12px 0}.tab{border:0;border-radius:13px;padding:11px;background:transparent;font-weight:850;color:var(--muted)}.tab.on{background:#fff;color:var(--pink);box-shadow:0 4px 14px rgba(100,70,120,.08)}.communityRow{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--line)}.communityRow .pos{width:28px;font-weight:950;color:var(--purple)}.communityRow .avatar{width:42px;height:42px}.metric{margin-left:auto;font-weight:950;color:var(--pink)}.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}.footer{font-size:10px;color:#a396aa;text-align:center;margin-top:24px}
+
+
+
+}
+
+}
+
+
+.saveResultBtn{background:linear-gradient(90deg,#ff76b8,#9d7cff);font-weight:950}
+#shareCanvas{display:none}
+
+#game .wrap{position:relative}
+#game .wrap:before{
+ content:"✦  ♡";position:absolute;top:72px;left:7px;
+ font-size:15px;letter-spacing:5px;color:rgba(255,111,181,.28);
+ transform:rotate(-8deg);pointer-events:none
+}
+#game .wrap:after{
+ content:"♪  ✧";position:absolute;right:8px;bottom:88px;
+ font-size:15px;letter-spacing:5px;color:rgba(157,124,255,.25);
+ transform:rotate(7deg);pointer-events:none
+}
+</style>
+</head><body><main class="app">
+<header><div class="brand">顔だけ。</div><div class="beta">β v0.4</div></header>
+<section id="start" class="screen active"><div class="hero"><div class="logo">顔だけ。</div><div class="tag">推しを忘れて、顔だけで選んでください。</div><p class="sub">名前も、所属も、人気も表示しません。<br>100回の2択から、あなたの「好きな顔」を探します。<br><span style="font-size:11px">（これから出てくる女性は、すべてアイドルです。）</span></p><button class="btn" onclick="begin()">顔だけ。をはじめる ♡</button><button id="previousResultBtn" class="btn secondary" style="display:none" onclick="showPreviousResult()">前回の結果を見る</button><button class="btn secondary" onclick="showCommunity()">みんなのランキング</button><div class="note">β版の人物・集計値はすべて仮データです。</div></div></section>
+<section id="game" class="screen"><div class="progressWrap"><div class="progress"><div id="bar" class="bar"></div></div><div id="phase" class="phase"></div><div id="count" class="count"></div></div><div class="question">直感で、どっち？</div><div class="pair"><button class="face" onclick="choose(0)"><div id="p0" class="portrait"></div><div class="pick">こっち ♡</div></button><button class="face" onclick="choose(1)"><div id="p1" class="portrait"></div><div class="pick">こっち ♡</div></button></div><div class="hint">考えすぎず、直感で。</div><button id="undoBtn" class="back" onclick="undo()">← ひとつ前に戻る</button></section>
+<section id="mid" class="screen"><div class="mid"><div class="spark">✦ ♡ ✦</div><div class="big">70 / 100</div><h2>あなたの「好きな顔」、<br>かなり絞れてきました。</h2><p class="sub">ここからは、あなたが選んできた顔たちが<br>何度もぶつかります。<br><br><b>残り30問。BEST5を決めましょう。</b></p><button class="btn" onclick="startFinal()">BEST5を決める →</button><button class="back" onclick="backFromMid()">← 70問目に戻る</button></div></section>
+<section id="final10" class="screen"><div class="mid"><div class="spark">✦ ♡ ✦</div><div class="big">90 / 100</div><h2>あと10問。</h2><p class="sub">BEST5候補は、もうすぐ決まります。<br><br>最後は迷う組み合わせが続くかもしれません。<br>それでも、考えすぎず「顔だけ」で。</p><button class="btn" onclick="startLast10()">最後の10問へ ♡</button><button class="back" onclick="backFromFinal10()">← 90問目に戻る</button></div></section>
+<section id="result" class="screen"><div class="resultTitle"><div class="eyebrow">YOUR BEST 5</div><h2>あなたの「顔だけ。」</h2><div class="sub">100回、名前を隠して選んだ結果です。</div></div><div id="diamond" class="diamond"></div><button class="btn small saveResultBtn" onclick="saveResultImage()">画像で保存・シェアする</button><button class="btn" onclick="startKnown()">BEST5を詳しく見る ♡</button><button class="btn secondary small" onclick="showCommunity('result')">みんなのランキング</button><button class="btn again small" onclick="returnTop()">↻ もう一度、顔だけ。</button></section>
+<section id="known" class="screen"><div class="resultTitle"><div class="eyebrow">DO YOU KNOW?</div><h2>知っていましたか？</h2><div class="sub">「顔だけ。」を始める前から知っていたか教えてください。</div></div><div id="knownBox" class="panel"></div><button class="back" onclick="backKnown()">← 戻る</button></section>
+<section id="detail" class="screen"><div class="resultTitle"><div class="eyebrow">YOUR RESULT</div><h2>BEST5を詳しく見る</h2><div class="sub">あなたの結果と、みんなの選択傾向。</div></div><div id="diagnosis" class="panel"></div><div id="detailList" class="panel"></div><button class="btn secondary small" onclick="showCommunity('detail')">みんなのランキングを見る</button><button class="back" onclick="show('result')">← ダイヤモンドランキングに戻る</button><button class="btn" onclick="returnTop()">もう一度、顔だけ。</button><div class="note">β版の全体集計は表示確認用の仮データです。</div></section>
+<section id="community" class="screen"><div class="resultTitle"><div class="eyebrow">EVERYONE'S 顔だけ。</div><h2>みんなのランキング</h2><div class="sub">β版ではサンプル集計を表示しています。</div></div><div class="tabs"><button id="tabFace" class="tab on" onclick="renderCommunity('face')">顔だけ。ランキング</button><button id="tabDisc" class="tab" onclick="renderCommunity('disc')">発掘ランキング</button></div><div id="communityList" class="panel"></div><button class="back" onclick="communityBack()">← 戻る</button></section>
+<div class="footer">顔だけ。 — 推しを忘れて、顔だけで選んでください。</div>
+</main>
+<script>
+const idols=[
+{name:'朝倉 ひな',group:'LUMI',pic:'🙂',base:74,disc:66},{name:'白石 りん',group:'MELLOW',pic:'😊',base:81,disc:38},{name:'天野 すず',group:'Aster',pic:'☺️',base:69,disc:79},{name:'水瀬 みう',group:'NOVA',pic:'😌',base:77,disc:71},{name:'桜庭 ゆら',group:'Ciel',pic:'🥰',base:84,disc:52},{name:'月城 まい',group:'Reve',pic:'😇',base:72,disc:83},{name:'一ノ瀬 かれん',group:'MUSE',pic:'😉',base:79,disc:61},{name:'橘 こはる',group:'Fleur',pic:'😄',base:68,disc:75},{name:'星野 りあ',group:'Lily',pic:'🤍',base:76,disc:68},{name:'小鳥遊 なな',group:'Prism',pic:'✨',base:73,disc:80},{name:'森川 せな',group:'Noir',pic:'🌙',base:71,disc:77},{name:'藤咲 あい',group:'Bloom',pic:'🌸',base:82,disc:57}];
+let scores=[],appear=[],rating=[],round=0,pair=[],history=[],rank=[],knownAnswers=Array(5).fill(null),knownIndex=0,finalPool=[],communityReturn='start',finalStarted=false,last10Started=false,checkpoints={},previousResult=null;
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0)}
+function begin(){scores=idols.map(()=>0);appear=idols.map(()=>0);rating=idols.map(()=>1000);round=0;history=[];rank=[];knownAnswers=Array(5).fill(null);finalPool=[];finalStarted=false;last10Started=false;checkpoints={};show('game');nextPair()}
+function winRate(i){return scores[i]/Math.max(1,appear[i])}
+function strength(i){return rating[i]+Math.min(appear[i],10)*2}
+function leastSeen(pool){let m=Math.min(...pool.map(i=>appear[i]));return pool.filter(i=>appear[i]===m)}
+function randomOf(a){return a[Math.floor(Math.random()*a.length)]}
+function makePair(pool){
+  // 1-40: broad exploration, prioritizing faces seen least often.
+  if(round<40){
+    let a=randomOf(leastSeen(pool));
+    let rest=pool.filter(i=>i!==a);
+    let b=randomOf(leastSeen(rest));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 41-70: blend likely favorites with under-tested faces.
+  if(round<70){
+    let ordered=[...pool].sort((a,b)=>strength(b)-strength(a));
+    let fav=ordered.slice(0,Math.min(7,ordered.length));
+    let under=[...pool].sort((a,b)=>appear[a]-appear[b]).slice(0,Math.min(7,pool.length));
+    let a=randomOf(Math.random()<.7?fav:under);
+    let candidates=pool.filter(i=>i!==a).sort((x,y)=>Math.abs(rating[x]-rating[a])-Math.abs(rating[y]-rating[a])||appear[x]-appear[y]);
+    let b=randomOf(candidates.slice(0,Math.min(4,candidates.length)));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 71-90: compare close contenders inside the ranking pool.
+  if(round<90){
+    let ordered=[...pool].sort((a,b)=>rating[b]-rating[a]);
+    let a=randomOf(ordered.slice(0,Math.min(8,ordered.length)));
+    let candidates=ordered.filter(i=>i!==a).sort((x,y)=>Math.abs(rating[x]-rating[a])-Math.abs(rating[y]-rating[a]));
+    let b=randomOf(candidates.slice(0,Math.min(3,candidates.length)));
+    return Math.random()<.5?[a,b]:[b,a];
+  }
+  // 91-100: position battles around the BEST5 boundary and top ranks.
+  let ordered=[...pool].sort((a,b)=>rating[b]-rating[a]);
+  const battles=[[0,1],[1,2],[2,3],[3,4],[4,5],[0,2],[1,3],[2,4],[3,5],[0,1]];
+  let [x,y]=battles[Math.min(round-90,battles.length-1)];
+  x=Math.min(x,ordered.length-2); y=Math.min(y,ordered.length-1);
+  return Math.random()<.5?[ordered[x],ordered[y]]:[ordered[y],ordered[x]];
+}
+function snapshotOrder(){return idols.map((_,i)=>i).sort((a,b)=>rating[b]-rating[a]||winRate(b)-winRate(a))}
+function nextPair(){
+ if(round===40&&!checkpoints[40])checkpoints[40]=snapshotOrder();
+ if(round===70&&!checkpoints[70])checkpoints[70]=snapshotOrder();
+ if(round===70&&!finalStarted){show('mid');return}
+ if(round===90&&!checkpoints[90])checkpoints[90]=snapshotOrder();
+ if(round===90&&!last10Started){show('final10');return}
+ if(round>=100){finish();return}let pool=round<70?idols.map((_,i)=>i):(finalPool.length?finalPool:idols.map((_,i)=>i));pair=makePair(pool);renderPair()}
+function renderPair(){
+ document.getElementById('p0').textContent=idols[pair[0]].pic;document.getElementById('p1').textContent=idols[pair[1]].pic;
+ document.getElementById('count').textContent=`${round+1} / 100`;
+ document.getElementById('phase').textContent=round<40?'DISCOVERY 40':round<70?'REFINE 30':round<90?'RANKING 20':'BEST5 CHECK 10';
+ document.getElementById('bar').style.width=`${round}%`;document.getElementById('undoBtn').disabled=history.length===0
+}
+function choose(side){
+ history.push({pair:[...pair],scores:[...scores],appear:[...appear],rating:[...rating],round,finalPool:[...finalPool],finalStarted,last10Started});
+ let winner=pair[side],loser=pair[1-side];
+ appear[pair[0]]++;appear[pair[1]]++;scores[winner]++;
+ let expected=1/(1+Math.pow(10,(rating[loser]-rating[winner])/400)),k=32;
+ rating[winner]+=k*(1-expected);rating[loser]+=k*(0-(1-expected));
+ round++;nextPair()
+}
+function undo(){if(!history.length)return;let h=history.pop();pair=h.pair;scores=h.scores;appear=h.appear;rating=h.rating;round=h.round;finalPool=h.finalPool;finalStarted=h.finalStarted;last10Started=h.last10Started||false;show('game');renderPair()}
+function startFinal(){
+ finalPool=idols.map((_,i)=>i).sort((a,b)=>rating[b]-rating[a]||winRate(b)-winRate(a)).slice(0,10);
+ finalStarted=true;show('game');nextPair()
+}
+function backFromMid(){undo()}
+function startLast10(){last10Started=true;show('game');nextPair()}
+function backFromFinal10(){undo()}
+function finish(){
+ rank=idols.map((x,i)=>({...x,idx:i,score:scores[i],rate:winRate(i),rating:rating[i],seen:appear[i]}))
+ .sort((a,b)=>b.rating-a.rating||b.rate-a.rate||b.score-a.score).slice(0,5);
+ renderDiamond();previousResult={rank:rank.map(x=>({...x})),knownAnswers:[...knownAnswers]};updatePreviousResultButton();show('result')
+}
+
+function roundRect(ctx,x,y,w,h,r,fill){
+ ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill()
+}
+function drawShareCard(){
+ const c=document.getElementById('shareCanvas'),ctx=c.getContext('2d');
+ c.width=1200;c.height=1500;
+
+ // Bright idol-like pastel background
+ let g=ctx.createLinearGradient(0,0,1200,1500);
+ g.addColorStop(0,'#fff0f8');g.addColorStop(.28,'#f7ecff');
+ g.addColorStop(.58,'#eaf7ff');g.addColorStop(.82,'#fff6cf');g.addColorStop(1,'#ffeaf4');
+ ctx.fillStyle=g;ctx.fillRect(0,0,1200,1500);
+
+ // Decorative sparkles/hearts, kept away from portraits
+ ctx.textAlign='center';
+ ctx.globalAlpha=.5;
+ ctx.font='42px system-ui,sans-serif';ctx.fillStyle='#ff75b8';
+ ctx.fillText('♡',105,115);ctx.fillText('✦',1090,185);ctx.fillText('♡',1090,1325);
+ ctx.fillStyle='#9d7cff';ctx.fillText('✧',180,1340);ctx.fillText('♪',1015,92);
+ ctx.globalAlpha=1;
+
+ roundRect(ctx,145,45,910,165,46,'rgba(255,255,255,.76)');
+ ctx.fillStyle='#ff5fa7';ctx.font='900 30px system-ui,sans-serif';ctx.fillText('顔だけ。',600,94);
+ ctx.fillStyle='#30283a';ctx.font='900 58px system-ui,sans-serif';ctx.fillText('あなたの BEST5',600,154);
+ ctx.fillStyle='#776f7e';ctx.font='700 23px system-ui,sans-serif';ctx.fillText('推しを忘れて、顔だけで選びました。',600,190);
+
+ // Card geometry. Portrait is always its own square region; text is only below it.
+ const cards=[
+   {i:0,x:410,y:245,w:380},
+   {i:1,x:105,y:680,w:315},{i:2,x:780,y:680,w:315},
+   {i:3,x:215,y:1065,w:285},{i:4,x:700,y:1065,w:285}
+ ];
+ cards.forEach(o=>{
+   const x=rank[o.i],w=o.w;
+   const cardH=w+118, pad=14, photo=w-pad*2;
+   roundRect(ctx,o.x,o.y,w,cardH,32,'rgba(255,255,255,.96)');
+
+   if(o.i===0){
+     ctx.strokeStyle='rgba(255,95,167,.35)';ctx.lineWidth=6;
+     ctx.beginPath();ctx.roundRect(o.x+3,o.y+3,w-6,cardH-6,29);ctx.stroke();
+   }
+
+   // Square portrait region
+   let pg=ctx.createLinearGradient(o.x+pad,o.y+pad,o.x+w-pad,o.y+pad+photo);
+   pg.addColorStop(0,'#ffd9ed');pg.addColorStop(.48,'#eee0ff');pg.addColorStop(1,'#dff5ff');
+   roundRect(ctx,o.x+pad,o.y+pad,photo,photo,24,pg);
+   ctx.fillStyle='#715d7b';
+   ctx.font=`900 ${o.i===0?88:70}px system-ui,sans-serif`;
+   ctx.fillText(x.pic,o.x+w/2,o.y+pad+photo/2+26);
+
+   // Dedicated text strip BELOW portrait; never overlaps image
+   const ty=o.y+pad+photo+28;
+   ctx.fillStyle=o.i===0?'#ff4f9f':'#9a69e8';
+   ctx.font=`900 ${o.i===0?30:25}px system-ui,sans-serif`;
+   ctx.fillText((o.i===0?'★ ':'')+(o.i+1)+'位',o.x+w/2,ty);
+   ctx.fillStyle='#30283a';ctx.font=`900 ${o.i===0?27:23}px system-ui,sans-serif`;
+   ctx.fillText(x.name,o.x+w/2,ty+34);
+   ctx.fillStyle='#817987';ctx.font='700 18px system-ui,sans-serif';
+   ctx.fillText(x.group,o.x+w/2,ty+61);
+ });
+
+ // Footer ribbon
+ roundRect(ctx,260,1432,680,42,21,'rgba(255,255,255,.72)');
+ ctx.fillStyle='#7b6d83';ctx.font='700 19px system-ui,sans-serif';
+ ctx.fillText('100回の2択から選んだ「顔だけ。」ランキング',600,1460);
+ return c;
+}
+async function saveResultImage(){
+ const c=drawShareCard();
+ const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png',1));
+ if(!blob)return;
+ const file=new File([blob],'kaodake-best5.png',{type:'image/png'});
+ if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+   try{
+     await navigator.share({files:[file],text:'私の「顔だけ。」BEST5'});
+     return;
+   }catch(e){if(e && e.name==='AbortError')return}
+ }
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='kaodake-best5.png';document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function renderDiamond(){document.getElementById('diamond').innerHTML=rank.map((x,i)=>`<div class="rankCard r${i+1}"><div class="rankPic">${x.pic}</div><div class="medal">${i===0?'👑 ':''}${i+1}位</div><div class="name">${x.name}</div><div class="group">${x.group}</div></div>`).join('')}
+
+function startKnown(){
+ if(knownAnswers.every(v=>v!==null)){renderDetails();show('detail');return}
+ knownIndex=knownAnswers.findIndex(v=>v===null);
+ if(knownIndex<0)knownIndex=0;
+ renderKnown();show('known')
+}
+function renderKnown(){if(knownIndex>=5){if(previousResult)previousResult.knownAnswers=[...knownAnswers];renderDetails();show('detail');return}let x=rank[knownIndex];document.getElementById('knownBox').innerHTML=`<div class="steps">${knownIndex+1} / 5</div><div class="knowTop"><div class="knowPic">${x.pic}</div><b>${knownIndex+1}位　${x.name}</b><div class="sub">${x.group}</div><h3>このアイドルを知っていましたか？</h3></div><div class="choices"><button class="btn secondary" onclick="answerKnown(true)">知っていた</button><button class="btn" onclick="answerKnown(false)">知らなかった</button></div>`}
+function answerKnown(v){knownAnswers[knownIndex]=v;knownIndex++;renderKnown()}
+function backKnown(){show('result')}
+function explain(x){
+ if(x.base>=76&&x.disc>=65)return'みんなの2択でも選ばれやすく、しかもこのサービスで初めて知る人が多いアイドルです。';
+ if(x.base>=76)return'みんなの2択でも「こっち」と選ばれることが多いアイドルです。';
+ if(x.disc>=65)return'BEST5に選んだ人の中で、このサービスをきっかけに初めて知った人が多いアイドルです。';
+ return'みんなの傾向とは別に、あなたの100回の選択でBEST5に残ったアイドルです。'
+}
+function rankAt(cp,idx){
+ let arr=checkpoints[cp]||[];let p=arr.indexOf(idx);return p<0?99:p+1
+}
+function discoveryLabel(i){
+ let x=rank[i],r40=rankAt(40,x.idx),r70=rankAt(70,x.idx),r90=rankAt(90,x.idx),now=i+1;
+ if(r70>5&&now<=3)return'後半で上位へ伸びた';
+ if(r90>now+2)return'最後の10問で順位を上げた';
+ if(r40<=3&&r70<=3&&r90<=3&&now<=3)return'序盤から上位に残り続けた';
+ return'100問の比較を経てBEST5に残った'
+}
+function diagnosisText(){
+ let unknownIdx=knownAnswers.map((v,i)=>v===false?i:-1).filter(i=>i>=0);
+ let unknown=unknownIdx.length,known=5-unknown,topUnknown=knownAnswers[0]===false;
+ let highestUnknown=unknown?unknownIdx[0]:null;
+ if(unknown===5)return'<div style="font-size:22px;font-weight:950;line-height:1.4">BEST5、全員はじめまして。</div><div class="desc">100回選んで残った5人は、全員あなたがプレイ前には知らなかったアイドルでした。<br><br>名前もグループも人気も関係なし。<b>あなたの「顔の好み」だけで見つけた5人です。</b><br><br>今回は「顔だけ。」のもう一つの楽しさ――知らなかったアイドルとの出会い――が、とても強く表れた結果になりました。</div>';
+ if(unknown===0)return'<div style="font-size:22px;font-weight:950;line-height:1.4">知っている5人。それでも、顔だけで残った。</div><div class="desc">BEST5は全員、プレイ前から知っていたアイドルでした。けれど今回は名前も所属も隠した状態での100回の選択です。<br><br><b>知っているから選んだのではなく、情報を外してもこの5人が残った。</b><br><br>普段「好き」と感じている顔と、直感だけで選んだ顔が重なった結果になりました。</div>';
+ if(topUnknown)return`<div style="font-size:22px;font-weight:950;line-height:1.4">今回、いちばんの発見。</div><div class="desc">あなたの「顔だけ。」1位は、プレイ前には知らなかった<b>${rank[0].name}</b>さんでした。BEST5全体でも、知らなかったアイドルが${unknown}人入っています。<br><br><b>知らなかったのに、顔だけなら一番好きだった。</b><br><br>新しいアイドルと出会うという意味でも、今回の結果を象徴する1位です。</div>`;
+ if(unknown>0){
+   let x=rank[highestUnknown];
+   return`<div style="font-size:22px;font-weight:950;line-height:1.4">「やっぱり好き」と「新しい好き」。</div><div class="desc">BEST5には、知っていたアイドルが${known}人、知らなかったアイドルが${unknown}人入りました。<br><br>もともとの好みを確かめながら、名前を知らなくても惹かれる顔にも出会っています。<b>今回もっとも上位に入った新発見は、${highestUnknown+1}位の${x.name}さん。</b><br><br>「顔だけ。」だから見つかった、新しい候補です。</div>`
+ }
+ return''
+}
+function personalComment(x,i){
+ let known=knownAnswers[i],tag=discoveryLabel(i),n=i+1;
+ if(!known&&i===0)return`<b>今回の「顔だけ。」最大の発掘。</b><br>${x.name}さんは、あなたがプレイ前には知らなかったアイドル。それでも${tag}結果、1位になりました。名前を知る前に「好きな顔」として選んだ相手です。`;
+ if(!known)return`<b>${n}位に入った、新しい発見。</b><br>${x.name}さんはプレイ前には知らなかったアイドル。${tag}結果、BEST5入りしました。「知らなかった顔」が、あなたの好みの中に入ってきた一人です。`;
+ if(known&&i===0)return`<b>知っていても、隠しても、1位。</b><br>${x.name}さんはもともと知っていたアイドルですが、名前も所属も見えない100問でも1位に残りました。${tag}一人です。`;
+ return`<b>知っていた顔を、顔だけでも選んだ。</b><br>${x.name}さんはもともと知っていたアイドル。${tag}結果、${n}位になりました。普段の印象を外してもBEST5に残った一人です。`
+}
+function metricComment(type,value){
+ let band=Math.max(0,Math.min(9,Math.floor(value/10)));
+ const face=[
+  'かなり低め。みんなの2択では選ばれる機会がまだ少ないようです。',
+  '低め。みんなの2択では、やや選ばれにくい傾向です。',
+  'やや低め。選ばれる割合はまだ控えめです。',
+  '少し低め。好みが分かれやすい位置です。',
+  'ほぼ中間。選ぶ人と選ばない人が拮抗しています。',
+  'やや高め。2択で選ばれることの方が多い顔です。',
+  '高め。多くの人の「好きな顔」に入りやすいようです。',
+  'かなり高め。2択では強く選ばれている顔です。',
+  'とても高い。幅広く「顔が好き」と選ばれているアイドルです。',
+  'トップクラス。ほとんどの比較で選ばれるほど高い支持です。'
+ ];
+ const disc=[
+  'かなり低め。選んだ人の多くが、もともと知っていたアイドルです。',
+  '低め。新発見というより、知っている人から選ばれることが多いようです。',
+  'やや低め。選んだ人には、もともと知っていた人が多めです。',
+  '少し低め。発掘よりも既知のファンからの選択がやや多い位置です。',
+  'ほぼ中間。知っていた人と、知らずに選んだ人が近い割合です。',
+  'やや高め。知らない状態からBEST5に選ぶ人が半数を超えています。',
+  '高め。「顔だけ。」で新しく見つけられることが多いアイドルです。',
+  'かなり高め。知らなかった人からも強く選ばれています。',
+  'とても高い。多くの人にとって「顔だけ。」が新しい出会いになっています。',
+  'トップクラス。選んだ人のほとんどにとって、新しく発見したアイドルです。'
+ ];
+ return (type==='face'?face:disc)[band]
+}
+function renderDetails(){
+ document.getElementById('diagnosis').innerHTML=`<div class="eyebrow">YOUR 顔だけ。DIAGNOSIS</div><h3 style="margin:8px 0">あなたの「顔だけ。」診断</h3>${diagnosisText()}`;
+ document.getElementById('detailList').innerHTML=rank.map((x,i)=>`<div class="detailPerson"><div class="detailHead"><div class="avatar">${x.pic}</div><div><b>${i+1}位　${x.name}</b><div class="sub">${x.group} ・ ${knownAnswers[i]?'知っていた':'知らなかった'}</div></div></div><div class="stats"><div class="stat"><small>顔だけ。率</small><div class="num">${x.base}.0%</div><div class="note">みんなの2択で、このアイドルが選ばれた割合</div><div class="note" style="margin-top:6px;font-weight:800;color:var(--ink)">${metricComment('face',x.base)}</div></div><div class="stat"><small>発掘度</small><div class="num">${x.disc}.0%</div><div class="note">このアイドルをBEST5に選んだ人のうち、プレイ前は知らなかった人の割合</div><div class="note" style="margin-top:6px;font-weight:800;color:var(--ink)">${metricComment('disc',x.disc)}</div></div></div></div>`).join('')
+}
+function updatePreviousResultButton(){
+ let b=document.getElementById('previousResultBtn');if(b)b.style.display=previousResult?'block':'none'
+}
+function returnTop(){updatePreviousResultButton();show('start')}
+function showPreviousResult(){
+ if(!previousResult)return;
+ rank=previousResult.rank.map(x=>({...x}));
+ knownAnswers=[...previousResult.knownAnswers];
+ renderDiamond();show('result')
+}
+function showCommunity(from='start'){communityReturn=from;renderCommunity('face');show('community')}
+function renderCommunity(type){document.getElementById('tabFace').classList.toggle('on',type==='face');document.getElementById('tabDisc').classList.toggle('on',type==='disc');let list=[...idols].sort((a,b)=>type==='face'?b.base-a.base:b.disc-a.disc).slice(0,10);document.getElementById('communityList').innerHTML=list.map((x,i)=>`<div class="communityRow"><div class="pos">${i+1}</div><div class="avatar">${x.pic}</div><div><b>${x.name}</b><div class="sub">${x.group}</div></div><div class="metric">${type==='face'?x.base:x.disc}.0%</div></div>`).join('')}
+function communityBack(){show(communityReturn)}
+function restart(){returnTop()}
+updatePreviousResultButton();
+</script><canvas id="shareCanvas" width="1200" height="1500"></canvas></body></html>
